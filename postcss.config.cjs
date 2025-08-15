@@ -1,5 +1,4 @@
-// ESM because "type": "module"
-export default {
+module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
