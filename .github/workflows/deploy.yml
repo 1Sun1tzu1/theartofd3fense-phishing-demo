@@ -25,11 +25,14 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - run: npm ci
-      - run: npm run build   # expects "build": "vite build" in package.json
+      # Use install (works without a lockfile)
+      - run: npm install
 
-      # Ensure the CNAME lands in the published artifact
-      - name: Copy CNAME into dist
+      # Ensure you have "build": "vite build" in package.json
+      - run: npm run build
+
+      # Ensure CNAME lands in the published output
+      - name: Ensure CNAME in dist
         run: |
           mkdir -p dist
           cp public/CNAME dist/CNAME
