@@ -1,8 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
-  push: {}            # run on any push (temporary while we debug)
-  workflow_dispatch:  # allow manual runs
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,14 +22,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-      - run: npm install
-      - run: npm run build
-
-      # keep custom domain
-      - run: mkdir -p dist && cp public/CNAME dist/CNAME || true
-
-      - uses: actions/upload-pages-artifact@v3
+      - name: Install deps (no lockfile)
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Preserve custom domain
+        run: |
+          mkdir -p dist
+          echo "infosec.theartofd3fense.cc" > dist/CNAME
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -41,4 +44,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-
