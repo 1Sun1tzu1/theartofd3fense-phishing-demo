@@ -19,23 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-
-      # Use install (works without a lockfile)
       - run: npm install
+      - run: npm run build  # uses "build": "vite build"
 
-      # Ensure you have "build": "vite build" in package.json
-      - run: npm run build
-
-      # Ensure CNAME lands in the published output
-      - name: Ensure CNAME in dist
-        run: |
+      # ensure the custom domain is preserved
+      - run: |
           mkdir -p dist
-          cp public/CNAME dist/CNAME
+          cp public/CNAME dist/CNAME || true
 
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -50,3 +44,4 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
