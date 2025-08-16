@@ -22,10 +22,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install dependencies (no lockfile)
-        run: npm install --no-audit --no-fund
+      - name: Install dependencies
+        run: npm ci || npm i
       - name: Build
-        run: npm run build -- --logLevel info
+        run: npm run build
+      # 👇 Write the CORRECT custom domain into the built artifact
+      - name: Preserve custom domain
+        run: |
+          mkdir -p dist
+          echo "infosec.theartofd3fense.co.uk" > dist/CNAME
+      # 👇 If you want to be extra-safe for SPA routes (optional because you already have public/404.html)
+      - name: Ensure 404.html exists
+        run: |
+          [ -f dist/404.html ] || cp dist/index.html dist/404.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
