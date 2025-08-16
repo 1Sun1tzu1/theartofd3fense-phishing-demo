@@ -26,10 +26,6 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Build
         run: npm run build -- --logLevel info
-      - name: Preserve custom domain
-        run: |
-          mkdir -p dist
-          echo "infosec.theartofd3fense.cc" > dist/CNAME
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
